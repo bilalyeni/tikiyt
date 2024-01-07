@@ -34,7 +34,7 @@ if(!interaction.isButton() && !interaction.isSelectMenu()) return;
         .setColor(client.config.color.purple)
         .setTitle(`${client.emoji.wrong} You already have a Ticket Opened!`)
         .setDescription(`***You already have a open ticket in ${checkTickets}! Please close it first!***`)
-        .setFooter(`Ticketing by Azury.live`, interaction.guild.iconURL())
+        .setFooter({text: client.config.clientFooter, iconURL: client.config.clientLogo }) 
                    return interaction.reply({ embeds: [embed], ephemeral: true})
                  } 
                 const reasons = new MessageActionRow()
@@ -45,7 +45,7 @@ if(!interaction.isButton() && !interaction.isSelectMenu()) return;
           .setCustomId(`error_reasons`)
           
         ])
-         await interaction.reply({ content: `<a:Loading:920516789883002880> **Creating your ticket (This could take a few seconds)...**`, ephemeral: true })
+         await interaction.reply({ content: `${client.emoji.loading} **Creating your ticket...**`, ephemeral: true })
         interaction.guild.channels.create(`${tcname || `ticket-${interaction.user.username}`}`, {
                     permissionOverwrites: [{
                             id: interaction.user.id,
@@ -61,7 +61,7 @@ if(!interaction.isButton() && !interaction.isSelectMenu()) return;
                     ],
                     type: 'text',
                     parent: cat,
-                    topic: `📨 Ticket for: ${interaction.user.tag} (${interaction.user.id})`
+                    topic: `📨 Event Team ticket for: ${interaction.user.tag} (${interaction.user.id})`
                 }).catch(() => {
           interaction.editReply({ content: `${client.emoji.wrong} **An Error Occured While Creating Your Ticket!**\n> *ErrCode: \`hHa_8\`*`, components: [reasons], ephemeral: true })
                 }).then(async function(channel) {
@@ -71,27 +71,22 @@ if(!interaction.isButton() && !interaction.isSelectMenu()) return;
                   
         const embed = new MessageEmbed()
         .setColor(client.config.color.yellow)
-        .setAuthor(`Ticket for: ${interaction.user.tag}`, interaction.user.displayAvatarURL(), `https://discord.gg/azury`)
-        .setDescription(`${message || `**Thanks for opening a ticket, please tell us what you need!**`}`)
+        .setAuthor(`Event Team ticket for: ${interaction.user.tag}`, interaction.user.displayAvatarURL(), `https://discord.gg/ysngroup`)
+        .setDescription(`${message || `**Hello, our staff will reply to you as soon as possible. In the meantime, please explain your reason for Decoupling tickets in as much detail as possible here.**`}`)
         .setThumbnail(interaction.guild.iconURL())
         const embed2 = new MessageEmbed()
         .setColor(client.config.color.main)
         .setAuthor(`A staff member will claim this ticket soon!`, `https://cdn.discordapp.com/emojis/833101350623117342.gif?size=512`)
         .setDescription(`> *Please wait for one of the users with <@&${role}> to claim!*`)
-        .setFooter(`🔷 On Shard: ${interaction.guild.shardId}`, interaction.guild.iconURL())
+        .setFooter({text: client.config.clientFooter, iconURL: client.config.clientLogo })
 
         const buttons = new MessageActionRow()
         .addComponents([,
           new MessageButton()
-          .setStyle(`PRIMARY`)
-          .setEmoji(`📝`)
-          .setLabel(`Transcript this Ticket`)
-          .setCustomId(`transcript_ticket${s}`),
-          new MessageButton()
           .setStyle(`LINK`)
           .setEmoji(`🔶`)
-          .setLabel(`Report a Ticket-Bug`)
-          .setURL(`https://discord.gg/azury`)
+          .setLabel(client.config.clientPresence)
+          .setURL(`https://www.ysngroup.com`)
         ])
           const row = new MessageActionRow()
           .addComponents([
@@ -118,8 +113,8 @@ if(!interaction.isButton() && !interaction.isSelectMenu()) return;
         .setColor(client.config.color.red)
         .setTitle(`${client.emoji.wrong} You need the Admin Role to Manage this ticket!`)
         .setDescription(`***You need <@&${role}> to close this ticket!***`)
-        .setFooter(`Ticketing by Azury.live\n🔷 On Shard: ${interaction.guild.shardId}`, interaction.guild.iconURL())
-                      if(!interaction.member.roles.cache.has(role)) {
+        .setFooter({text: client.config.clientFooter, iconURL: client.config.clientLogo })
+                      if(!interaction.member.roles.cache.has(role) && !interaction.member.permissions.has("ADMINISTRATOR")) {
                         return interaction.reply({ embeds: [norole], ephemeral: true})
                       }
         const opener = db.get(`Ticketopener_${interaction.channel.id}`)
@@ -138,11 +133,9 @@ if(!interaction.isButton() && !interaction.isSelectMenu()) return;
         .setColor(client.config.color.success)
         .setTitle(`${client.emoji.correct} Locked the ticket!`)
         .setDescription(`**I have locked the ticket and removed <@${require(`quick.db`).fetch(`Ticketopener_${interaction.channel.id}`).id}> from it!**\n*They can no-longer see the ticket!*`)
-        .setFooter(`🔷 On Shard: ${interaction.guild.shardId}`, interaction.guild.iconURL())
+        .setFooter({text: client.config.clientFooter, iconURL: client.config.clientLogo })
 
         interaction.channel.send({ embeds: [embed] })
-
-        tcopener.send({ content: `${client.emoji.manage} **Your ticket was Locked by \`${interaction.user.tag}\`** ${client.emoji.manage}`})
 
       }  else if (interaction.values == `pin_ticket${s}`) {
         const opener = db.get(`Ticketopener_${interaction.channel.id}`)
@@ -153,14 +146,14 @@ if(!interaction.isButton() && !interaction.isSelectMenu()) return;
         .setColor(client.config.color.red)
         .setTitle(`${client.emoji.wrong} You need the Admin Role to Manage this ticket!`)
         .setDescription(`***You need <@&${role}> to pin this ticket!***`)
-        .setFooter(`Ticketing by Azury.live\n🔷 On Shard: ${interaction.guild.shardId}`, interaction.guild.iconURL())
-                      if(!interaction.member.roles.cache.has(role)) {
+        .setFooter({text: client.config.clientFooter, iconURL: client.config.clientLogo })
+                      if(!interaction.member.roles.cache.has(role) && !interaction.member.permissions.has("ADMINISTRATOR")) {
                         return interaction.reply({ embeds: [norole], ephemeral: true})
                       }
          const alreadypinned = new MessageEmbed()
         .setColor(client.config.color.red)
         .setTitle(`${client.emoji.wrong} Ticket has already been pinned!`)
-        .setFooter(`Ticketing by Azury.live\n🔷 On Shard: ${interaction.guild.shardId}`, interaction.guild.iconURL())
+        .setFooter({text: client.config.clientFooter, iconURL: client.config.clientLogo })
 
         if(pinned) return interaction.reply({ embeds: [alreadypinned], ephemeral: true})
         
@@ -169,7 +162,7 @@ if(!interaction.isButton() && !interaction.isSelectMenu()) return;
         .setColor(client.config.color.success)
         .setTitle(`📌 Pinned the Ticket!`)
         .setDescription(`> ***${interaction.user} has pinned this ticket!***`)
-        .setFooter(`🔷 On Shard: ${interaction.guild.shardId}`, interaction.guild.iconURL())
+        .setFooter({text: client.config.clientFooter, iconURL: client.config.clientLogo })
         db.set(`pinned_${interaction.channel.id}`, "pinned")
         interaction.channel.send({ embeds: [embed] })
         await interaction.deferUpdate({ ephemeral: false }).catch(() => {});
@@ -178,8 +171,8 @@ if(!interaction.isButton() && !interaction.isSelectMenu()) return;
         .setColor(client.config.color.red)
         .setTitle(`${client.emoji.wrong} You need the Admin Role to Manage this ticket!`)
         .setDescription(`***You need <@&${role}> to delete this ticket!***`)
-        .setFooter(`Ticketing by Azury.live\n🔷 On Shard: ${interaction.guild.shardId}`, interaction.guild.iconURL())
-                      if(!interaction.member.roles.cache.has(role)) {
+        .setFooter({text: client.config.clientFooter, iconURL: client.config.clientLogo })
+                      if(!interaction.member.roles.cache.has(role) && !interaction.member.permissions.has("ADMINISTRATOR")) {
                         return interaction.reply({ embeds: [norole], ephemeral: true})
                       }
         const modal = new Modal() // We create a Modal
@@ -217,20 +210,20 @@ if(!interaction.isButton() && !interaction.isSelectMenu()) return;
         .setColor(client.config.color.red)
         .setTitle(`${client.emoji.wrong} You need the Admin Role to Manage this ticket!`)
         .setDescription(`***You need <@&${role}> to claim this ticket!***`)
-        .setFooter(`Ticketing by Azury.live\n🔷 On Shard: ${interaction.guild.shardId}`, interaction.guild.iconURL())
+        .setFooter({text: client.config.clientFooter, iconURL: client.config.clientLogo })
 
         const rolebutuser = new MessageEmbed()
         .setColor(client.config.color.red)
         .setTitle(`${client.emoji.wrong} You cant claim your Ticket!`)
         .setDescription(`***You have <@&${role}> but you opened this ticket!***`)
-        .setFooter(`Ticketing by Azury.live\n🔷 On Shard: ${interaction.guild.shardId}`, interaction.guild.iconURL())
+        .setFooter({text: client.config.clientFooter, iconURL: client.config.clientLogo })
 
         const alreadyclaimed = new MessageEmbed()
         .setColor(client.config.color.red)
         .setTitle(`${client.emoji.wrong} Ticket has already been claimed by another user!`)
-        .setFooter(`Ticketing by Azury.live\n🔷 On Shard: ${interaction.guild.shardId}`, interaction.guild.iconURL())
+        .setFooter({text: client.config.clientFooter, iconURL: client.config.clientLogo })
         
-        if(!interaction.member.roles.cache.has(role)) {
+        if(!interaction.member.roles.cache.has(role) && !interaction.member.permissions.has("ADMINISTRATOR")) {
                         return interaction.reply({ embeds: [norole], ephemeral: true})
                       }
         if(claimed) return interaction.reply({ embeds: [alreadyclaimed], ephemeral: true})
@@ -238,13 +231,13 @@ if(!interaction.isButton() && !interaction.isSelectMenu()) return;
         const embed = new MessageEmbed()
         .setAuthor(`${interaction.user.username} Claimed this ticket!`, interaction.user.displayAvatarURL())
         .setColor(client.config.color.main)
-        .setFooter(`Ticketing by Azury.live\n🔷 On Shard: ${interaction.guild.shardId}`, interaction.guild.iconURL())
+        .setFooter({text: client.config.clientFooter, iconURL: client.config.clientLogo })
 
         const embed2 = new MessageEmbed()
         .setColor(client.config.color.main)
-        .setAuthor(`${interaction.user.tag} ⚡ Staff Member`, interaction.user.displayAvatarURL(), `https://discord.gg/azury`)
+        .setAuthor(`${interaction.user.tag} ⚡ Staff Member`, interaction.user.displayAvatarURL(), `https://discord.gg/ysngroup`)
         .setDescription(`> _**${interaction.user.username}** has claimed this ticket!_`)
-        .setFooter(`🔷 On Shard: ${interaction.guild.shardId}`)
+        .setFooter({text: client.config.clientFooter, iconURL: client.config.clientLogo })
 
         db.set(`claimed_${interaction.channel.id}`, "claimed")
         interaction.message.edit({ embeds: [interaction.message.embeds[0], embed2]})

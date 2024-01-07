@@ -57,8 +57,26 @@ module.exports = {
         required: true,
       },
       {
+        name: "button_emoji",
+        description: "Emoji for the button",
+        type: "STRING",
+        required: true,
+      },
+      {
+        name: "embed_title",
+        description: "title of embed",
+        type: "STRING",
+        required: true,
+      },
+      {
         name: "embed_desc",
         description: "Message on prompt",
+        type: "STRING",
+        required: true,
+      },
+      {
+        name: "embed_footer",
+        description: "Footer for the embed message",
         type: "STRING",
         required: true,
       },
@@ -66,7 +84,7 @@ module.exports = {
         name: "ticket_open_msg",
         description: "Message on ticket-open [Use +n+ to add a space]",
         type: "STRING",
-        required: true,
+        required: false,
       },
       {
         name: "ticket_channel_name",
@@ -94,9 +112,12 @@ module.exports = {
       let channel = interaction.options.getChannel("channel");
       let category = interaction.options.getChannel("category");
       let role = interaction.options.getRole('role');
+      let title = interaction.options.getString('embed_title');
       let message = interaction.options.getString('embed_desc');
+      let footer = interaction.options.getString('embed_footer');
       let msg = interaction.options.getString('ticket_open_msg');
       let label = interaction.options.getString('button_label');
+      let emoji = interaction.options.getString('button_emoji');
       let ticketname = interaction.options.getString('ticket_channel_name') || `ticket-{user}`;
       let check = await interaction.guild.channels.cache.get(channel.id);
 
@@ -106,16 +127,16 @@ module.exports = {
 
       const panel = new MessageEmbed()
       .setColor(client.config.color.main)
-      .setTitle(`📨 Open a Ticket`)
+      .setTitle(title)
       .setDescription(`${message || `Open a ticket for ${interaction.guild.name}`}`)
-      .setFooter(`Press the Button below to open a ticket`, interaction.guild.iconURL())
+      .setFooter(footer)
 
       const button = new MessageActionRow()
       .addComponents([
         new MessageButton()
         .setLabel(label)
-        .setStyle(`PRIMARY`)
-        .setEmoji(`📨`)
+        .setStyle(`DANGER`)
+        .setEmoji(emoji)
         .setCustomId(`create_ticket${s}`)
       ])
       const embed = new MessageEmbed()
@@ -123,8 +144,8 @@ module.exports = {
       .setTitle(`${client.emoji.correct} I have Setup the Ticket System`)
         .setDescription(`I have successfuly setup your ticket system! To setup the logs, use \`/ticket-logs\`!`)
       .addField(`:1234: System Number:`, `**${s}. Ticket-System**`)
-      .addField(`<:Channel:934536160087244950> Ticket Channel:`, `**${channel} (${channel.id})**`)
-      .addField(`<:Channel:934536160087244950> Ticket Category:`, `**${category || `_\` None Set, Using Default \`_`}**`)
+      .addField(`<:Channel:936546405584089108> Ticket Channel:`, `**${channel} (${channel.id})**`)
+      .addField(`<:Channel:936546405584089108> Ticket Category:`, `**${category || `_\` None Set, Using Default \`_`}**`)
       .addField(`${client.emoji.manage} Admin Role:`, `**${role} (${role.id})**`)
         .addField(`${client.emoji.preview} Ticket Channel Name`, `\`${ticketname}\` (*The variable \`{user}\` will show as the Opener username*)`)
         .addField(`${client.emoji.preview} Ticket Message (Panel Embed)`, `${message || `Open a ticket for ${interaction.guild.name}`}`)

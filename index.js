@@ -12,6 +12,8 @@ const client = new Client({
 });
 module.exports = client;
 
+const { AutoKill } = require('autokill')
+AutoKill({Client: client, Time: 20000}) // Time Must be in Milliseconds And More Than 5 Seconds!
 // Global Variables
 
 client.commands = new Collection();
@@ -31,7 +33,6 @@ require("./webport")();
 }
 
 
-
 // stop and restart
 const glob = require("glob")
 const fetch = require(`node-fetch`)
@@ -43,7 +44,7 @@ client.on("interactionCreate", async (btn) => {
     })
     try {
       btn.reply({
-        content: "<a:Loading:920516789883002880> **Shuttingdown the bot...**",
+        content: "<a:loading_:906786750494564353> **Shutting down the bot...**",
         ephemeral: true
       })
       setTimeout(() => {
@@ -65,7 +66,7 @@ client.on("interactionCreate", async (btn) => {
       filter,
       max: 1
     })
-    btn.reply({ content: "<a:Loading:920516789883002880> **Send new Bot Name**",
+    btn.reply({ content: "<a:loading_:906786750494564353> **Send new Bot Name**",
         ephemeral: true})
     /* collector.on("collect", async(msg) => {
       
@@ -98,12 +99,12 @@ client.on("interactionCreate", async (btn) => {
       filter,
       max: 1
     })
-    btn.reply({ content: "<a:Loading:920516789883002880> **Send the New Bot Image**",
+    btn.reply({ content: "<a:loading_:906786750494564353> **Send the New Bot Image**",
         ephemeral: true})
     collector.on("collect", async (msg) => {
         let url = msg.content;
       if(msg.content.includes(`https://`)) {
-        btn.editReply({ content: "<a:Loading:920516789883002880> **Changing avatar...**",
+        btn.editReply({ content: "<a:loading_:906786750494564353> **Changing avatar...**",
         ephemeral: true})
         
         await msg.delete()
@@ -125,11 +126,7 @@ client.on("interactionCreate", async (btn) => {
     })
   }
 })
-
-
-client.login(process.env.token || client.config.token)
-
-/*           ANTI CRASHING            ¦¦           ANTI CRASHING           */ 
+client.login(process.env.token)
 process.on('unhandledRejection', (reason, p) => {
     console.log('\n\n\n\n\n[🚩 Anti-Crash] unhandled Rejection:'.toUpperCase().red.dim);
     console.log(reason.stack.yellow.dim ? String(reason.stack).yellow.dim : String(reason).yellow.dim);
@@ -148,7 +145,11 @@ process.on('unhandledRejection', (reason, p) => {
     console.log(code.yellow.dim);
     console.log('=== before Exit ===\n\n\n\n\n'.toUpperCase().red.dim);
   });
-
+  process.on('exit', (code) => {
+    console.log('\n\n\n\n\n[🚩 Anti-Crash] exit'.toUpperCase().red.dim);
+    console.log(code.yellow.dim);
+    console.log('=== exit ===\n\n\n\n\n'.toUpperCase().red.dim);
+  });
   process.on('multipleResolves', (type, promise, reason) => {
     console.log('\n\n\n\n\n[🚩 Anti-Crash] multiple Resolves'.toUpperCase().red.dim);
     console.log(type, promise, reason.yellow.dim);

@@ -6,7 +6,7 @@
      run: async (client, interaction, args) => {
        let msg = await interaction.followUp({ content: `Fetching..` })
 
-       if (!client.config.developers.includes(interaction.user.id)) return msg.edit({ content: `🔐 **This command is locked to the "BOT DEVELOPERS" only!**`, ephemeral: true})
+       if (!client.config.developers.includes(interaction.user.id)) return msg.edit({ content: `🔐 **This command is locked to the "Bilal" only!**`, ephemeral: true})
 
        let array = []
        client.guilds.cache.forEach(async(x) => {
