@@ -14,9 +14,9 @@
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/mipcit1010/Ticket-Bot/issues"
+    "url": ""
   },
-  "homepage": "https://github.com/mipcit1010/Ticket-Bot#readme",
+  "homepage": "",
   "dependencies": {
     "autokill": "^2.0.3",
     "chalk": "^4.1.2",
